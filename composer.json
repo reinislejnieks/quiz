@@ -1,0 +1,21 @@
+{
+    "name": "vagrant/quiz",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Reinis Lejnieks",
+            "email": "rlejnieks@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Quiz\\": "src/",
+            "Quiz\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.4@dev"
+    }
+}
