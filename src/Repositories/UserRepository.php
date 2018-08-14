@@ -11,9 +11,9 @@ class UserRepository
 
     private $idCounter = 0;
 
-    public function getById( int $userId): UserModel
+    public function getById(int $userId): UserModel
     {
-        if(isset($this->users[$userId])){
+        if (isset($this->users[$userId])) {
             return $this->users[$userId];
         }
 
@@ -24,7 +24,7 @@ class UserRepository
     {
         $existingUser = $this->getById($user->id);
 
-        if(!$existingUser->isNew()){
+        if ($existingUser->isNew()) {
             $this->idCounter += 1;
             $existingUser->id = $this->idCounter;
         }

@@ -15,13 +15,6 @@ class UserTest extends TestCase
     {
         parent::setUp();
 
-        $this->userRepository = new UserRepository;
-
-        $user = new UserModel;
-        $user->id = 23;
-        $user->name = 'Atis';
-
-        $this->userRepository->saveOrCreate($user);
 
 
 
@@ -29,9 +22,17 @@ class UserTest extends TestCase
     /** @test */
     public function userRetrievalById()
     {
-        $user = $this->userRepository->getById(23);
+        $userRepository = new UserRepository;
 
-        self::assertEquals(23, $user->id);
+        $user = new UserModel(0, 'Atis');
+
+        $user = $userRepository->saveOrCreate($user);
+
+
+
+        $userRetrieved = $userRepository->getById($user->id);
+
+        self::assertEquals($user, $userRetrieved);
     }
     /** @test */
     public function userCreation()
@@ -39,8 +40,7 @@ class UserTest extends TestCase
         $repo = new UserRepository();
 
 
-        $user = new UserModel;
-        $user->name = 'Mārcis';
+        $user = new UserModel(2, 'Mārcis');
 
         $userCreated = $repo->saveOrCreate($user);
 
@@ -54,19 +54,15 @@ class UserTest extends TestCase
     public function nameEdit()
     {
         $repo = new UserRepository();
-
-
-        $user = new UserModel;
-        $user->name = 'Mārcis';
-
+        $user = new UserModel(1, 'Mārcis');
         $savedUser = $repo->saveOrCreate($user);
 
         $savedUser->name = 'Jānis';
 
-        $editedUser = $repo->saveOrCreate($user);
+        $editedUser = $repo->saveOrCreate($savedUser);
 
-        self::assertFalse($savedUser->name, $editedUser->name, 'Name is saved');
-        self::assertFalse($savedUser->id, $editedUser->id, 'Same id');
+        self::assertEquals($savedUser->id, $editedUser->id, 'Same id');
+        self::assertEquals($savedUser->name, $editedUser->name, 'Name is saved');
     }
 
     /** @test */
@@ -74,18 +70,13 @@ class UserTest extends TestCase
     {
         $repo = new UserRepository();
 
-
-        $user = new UserModel;
-        $user->name = 'Mārcis';
-
+        $user = new UserModel(2, 'Mārcis');
         $repo->saveOrCreate($user);
 
-        $user = new UserModel;
-        $user->name = 'Agris';
-
+        $user = new UserModel(3, 'Agris');
         $repo->saveOrCreate($user);
 
-//        self::assertCount()
+        self::assertCount(2, $repo->getAll());
 
 
     }

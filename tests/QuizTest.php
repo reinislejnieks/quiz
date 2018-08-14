@@ -3,6 +3,7 @@
 namespace Quiz\Tests;
 
 use PHPUnit\Framework\TestCase;
+
 use Quiz\Models\AnswerModel;
 use Quiz\Models\QuestionModel;
 use Quiz\Models\QuizModel;
@@ -98,7 +99,7 @@ class QuizTest extends TestCase
 
                 $this->quizRepository->addQuestion($question);
 
-                foreach($answers as $answerText => $isCorrect){
+                foreach ($answers as $answerText => $isCorrect) {
                     $a = new AnswerModel;
                     $a->id = ++$answerIds;
                     $a->answer = $answerText;
