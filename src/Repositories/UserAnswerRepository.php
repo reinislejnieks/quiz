@@ -6,13 +6,28 @@ use Quiz\Models\UserAnswerModel;
 
 class UserAnswerRepository
 {
+    /** @var UserAnswerModel[] */
     private $answers;
 
-    public function saveAnswer(UserAnswerModel $answer)
+    /**
+     * Save user answer
+     *
+     * @param UserAnswerModel $answer
+     * @return UserAnswerModel
+     */
+    public function saveAnswer(UserAnswerModel $answer): UserAnswerModel
     {
         $this->answers[] = $answer;
+        return $answer;
     }
 
+    /**
+     * Get all user answers
+     *
+     * @param int $userId
+     * @param int $quiz
+     * @return array
+     */
     public function getAnswers(int $userId, int $quiz): array
     {
         $matching = [];

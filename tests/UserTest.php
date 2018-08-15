@@ -73,8 +73,8 @@ class UserTest extends TestCase
         $user = new UserModel(2, 'Mārcis');
         $repo->saveOrCreate($user);
 
-        $user = new UserModel(3, 'Agris');
-        $repo->saveOrCreate($user);
+        $anotherUser = new UserModel(3, 'Agris');
+        $repo->saveOrCreate($anotherUser);
 
         self::assertCount(2, $repo->getAll());
 

@@ -10,12 +10,12 @@ use Quiz\Repositories\UserAnswerRepository;
 class AnswerTest extends TestCase
 {
     /** @test */
-    public function canWeGetUserAnswers()
+    public function submittedAnswerIsFound()
     {
 
         $repo = new UserAnswerRepository;
 
-        $answer = new UserAnswerModel(1,666, 23321, 1117867);
+        $answer = new UserAnswerModel(1,666, 23321, 1117867, 234);
 //        $answer = new UserAnswerModel;
 //        $answer->id = 1;
 //        $answer->quizId = 666;
@@ -24,7 +24,7 @@ class AnswerTest extends TestCase
 //        $answer->userId = 1117867;
         $repo->saveAnswer($answer);
 
-        $answer = new UserAnswerModel(222,111, 222, 1);
+        $answer = new UserAnswerModel(222,111, 222, 1, 5);
 //        $answer = new UserAnswerModel;
 //        $answer->id = 222;
 //        $answer->quizId = 222;
@@ -38,5 +38,17 @@ class AnswerTest extends TestCase
         $answerFound = array_shift($answersFound);
 
         self::assertEquals($answer, $answerFound);
+    }
+
+    /** @test */
+    public function canWeSubmitAnswer()
+    {
+        $repo = new UserAnswerRepository;
+
+        $answer = new UserAnswerModel(1,666, 23321, 1117867);
+
+        $answerSubmitted = $repo->saveAnswer($answer);
+
+        self::assertEquals($answer, $answerSubmitted);
     }
 }

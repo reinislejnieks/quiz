@@ -8,4 +8,5 @@ class AnswerModel
     public $answer;
     public $questionId;
     public $isCorrect;
+
 }
