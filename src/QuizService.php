@@ -172,7 +172,6 @@ class QuizService
         $allQuestions = $this->getQuestions($quizId);
         foreach ($allQuestions as $question) {
             $allAnswers = $this->getAnswers($question->id);
-            print_r($allAnswers);
             foreach ($allAnswers as $answer) {
                 if ($answer->isCorrect) {
                     $rightAnswers[] = $answer;
