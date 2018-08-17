@@ -3,7 +3,7 @@
 namespace Quiz\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Quiz\QuizService;
+use Quiz\Services\QuizService;
 use Quiz\Models\AnswerModel;
 use Quiz\Models\QuestionModel;
 use Quiz\Models\QuizModel;

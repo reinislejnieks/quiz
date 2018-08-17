@@ -10,13 +10,12 @@
 <script>
     (function () {
         let form = document.getElementById('user-form');
-
         console.log(form);
         form.addEventListener("submit", function (evt) {
             evt.preventDefault();
             let name = document.getElementById("name");
             let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/ajax/save');
+            xhr.open('POST', '/ajax/request');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function () {
                 if (xhr.status !== 200) {
@@ -26,7 +25,7 @@
                 let response = JSON.parse(xhr.responseText);
 
                 if (response.message === 0) {
-                    return alert(response.error);
+                    return console.log(response.error);
                 }
                 return console.log("Seuccess!");
             };

@@ -21,4 +21,5 @@ class UserDatabaseRepository extends BaseDatabaseRepository
     {
         return 'users';
     }
+
 }

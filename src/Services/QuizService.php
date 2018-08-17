@@ -1,6 +1,6 @@
 <?php
 
-namespace Quiz;
+namespace Quiz\Services;
 
 use Quiz\Models\AnswerModel;
 use Quiz\Models\QuestionModel;

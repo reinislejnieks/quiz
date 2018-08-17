@@ -70,12 +70,14 @@ abstract class BaseDatabaseRepository implements RepositoryInterface
     {
         $class = static::modelName();
         $instance = new $class;
+        // TODO: Add this
 //        $instance->setAttributes($attributes); // new
         foreach ($attributes as $key => $value) {
             if (property_exists($class, $key)) {
                 $instance->$key = $value;
             }
         }
+        // TODO: Add this. Other part is in Base model
 //        static::prepareAttributes($instance); // new
 
         return $instance;

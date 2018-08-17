@@ -11,10 +11,11 @@ abstract class BaseModel
     {
         return $this->attributes;
     }
+    // TODO: add this
 //    function setAttributes(array $attributes = [])
 //    {
 //        foreach ($attributes as $key => $value) {
-//            if (property_exists($class, $key)) {
+//            if (property_exists(static::class, $key)) {
 //                $instance->$key = $value;
 //            }
 //        }
