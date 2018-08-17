@@ -3,7 +3,9 @@
 namespace Quiz\Database\Mysql;
 
 //class MysqlConnectionConfig implements ConnectionConfigInterface
-class MysqlConnectionConfig
+use Quiz\Interfaces\ConnectionConfigInterface;
+
+class MysqlConnectionConfig implements ConnectionConfigInterface
 {
     // get these from env
     public $driver = 'mysql';
@@ -14,6 +16,8 @@ class MysqlConnectionConfig
 
     public  $user = 'homestead';
 
-    public  $pass = 'secret';
+    public  $password = 'secret';
+
+    public $database = 'quiz';
 
 }

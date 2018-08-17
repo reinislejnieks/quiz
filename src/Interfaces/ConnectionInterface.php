@@ -4,7 +4,7 @@ namespace Quiz\Interfaces;
 
 interface ConnectionInterface
 {
-    public function select(string $table, array $condition = [], array $select = []): string;
+    public function select(string $table, array $condition = [], array $select = []): array;
 
     public function insert(string $table, string $primaryKey, array $attributes): bool;
 
