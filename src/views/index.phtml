@@ -46,16 +46,22 @@ var_dump($quizzes);
         function getApi(apiRoute, callback){
             let request = new XMLHttpRequest();
 
+            request.onreadystatechange = function() {
+              if (request.state === 4 && request.status === 200) {
+                  callback(response);
+              }
+            };
             request.addEventListener('load', dataHandler);
-            request.open('GET', apiRoute); //sends to the API you include
+            request.open('GET', apiRoute, true); //sends to the API you include
             request.send();
+            request.setRequestHeader('Content-Type: application/json; charset=UTF-8');
 
-            function dataHandler(){
+            function dataHandler(response){
                 //this passes "this.responseText" to your callback function
-                callback(this.responseText);
+                callback(response);
             }
         }
-        getApi('/getQuizzesAjax/getQuizzes', function(data){
+        getApi('/getQuizzesAjax/getQuizzes', function(data) {
             console.log(data);
         });
 

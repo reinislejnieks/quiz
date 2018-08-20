@@ -19,12 +19,9 @@ class QuizzesService
     /** @var int */
     private $submitAnswerIndex = 0;
 
-    public function __construct(
-        QuizzesDbRepository $quizzes/*,
-        UserAnswerInMemoryRepository $userAnswers*/
-    ) {
+    public function __construct(QuizzesDbRepository $quizzes)
+    {
         $this->quizzes = $quizzes;
-//        $this->userAnswers = $userAnswers;
     }
 
     /**
@@ -35,6 +32,8 @@ class QuizzesService
     public function getQuizzes()
     {
         $results = $this->quizzes->all();
+//        $file = 'test2.txt';
+//        file_put_contents($file, json_encode($results));
         return $results;
     }
 

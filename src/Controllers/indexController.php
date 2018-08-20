@@ -20,7 +20,8 @@ class IndexController extends BaseController
     public function indexAction()
     {
         $quizzes = $this->quizzesService->getQuizzes();
-        $user = $this->usersDbRepository->all();
+//        $user = $this->usersDbRepository->all();
+        $user = ' ';
         if ($user === null) {
             // TODO 404?
         }

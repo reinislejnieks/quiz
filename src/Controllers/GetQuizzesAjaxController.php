@@ -17,6 +17,7 @@ class GetQuizzesAjaxController extends BaseAjaxController
     public function getQuizzesAction()
     {
         $data = $this->quizzesService->getQuizzes();
+
         return $data;
     }
 }

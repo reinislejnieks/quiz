@@ -30,4 +30,12 @@ class UserModel extends BaseModel
     {
         return !$this->isNew();
     }
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => $this->name,
+            'id' => $this->id
+        ];
+    }
 }
