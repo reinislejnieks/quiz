@@ -1,8 +1,10 @@
 <?php
-//use Quiz\Models\User;
+var_dump($user);
+var_dump($quizzes);
+
 ?>
 <div class="container">
-    <form id="user-form" action="/ajax">
+    <form id="user-form" action="/ajax/saveUser">
         <input id="name" type="text" name="username">
         <input type="submit" value="Send">
     </form>
@@ -10,12 +12,11 @@
 <script>
     (function () {
         let form = document.getElementById('user-form');
-        console.log(form);
         form.addEventListener("submit", function (evt) {
             evt.preventDefault();
             let name = document.getElementById("name");
             let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/ajax/request');
+            xhr.open('POST', '/ajax/saveUser');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function () {
                 if (xhr.status !== 200) {
@@ -32,6 +33,30 @@
 
             let data = 'name=' + name.value;
             xhr.send(encodeURI(data));
+        });
+        // getting quiz list
+        // function reqListener () {
+        //     let response = JSON.parse(this.responseText);
+        //     console.log(response);
+        // }
+        // let oReq = new XMLHttpRequest();
+        // oReq.addEventListener("load", reqListener);
+        // oReq.open("GET", "/getQuizzesAjax/getQuizzes");
+        // oReq.send();
+        function getApi(apiRoute, callback){
+            let request = new XMLHttpRequest();
+
+            request.addEventListener('load', dataHandler);
+            request.open('GET', apiRoute); //sends to the API you include
+            request.send();
+
+            function dataHandler(){
+                //this passes "this.responseText" to your callback function
+                callback(this.responseText);
+            }
+        }
+        getApi('/getQuizzesAjax/getQuizzes', function(data){
+            console.log(data);
         });
 
     })();

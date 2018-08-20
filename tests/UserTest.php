@@ -4,11 +4,11 @@ namespace Quiz\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Quiz\Models\UserModel;
-use Quiz\Repositories\UserRepository;
+use Quiz\Repositories\UsersInMemoryRepository;
 
 class UserTest extends TestCase
 {
-    /** @var userRepository */
+    /** @var UsersInMemoryRepository */
     private $userRepository;
 
     public function setUp()
@@ -22,7 +22,7 @@ class UserTest extends TestCase
     /** @test */
     public function userRetrievalById()
     {
-        $userRepository = new UserRepository;
+        $userRepository = new UsersInMemoryRepository;
 
         $user = new UserModel(0, 'Atis');
 
@@ -37,7 +37,7 @@ class UserTest extends TestCase
     /** @test */
     public function userCreation()
     {
-        $repo = new UserRepository();
+        $repo = new UsersInMemoryRepository();
 
 
         $user = new UserModel(2, 'Mārcis');
@@ -53,7 +53,7 @@ class UserTest extends TestCase
     /** @test */
     public function nameEdit()
     {
-        $repo = new UserRepository();
+        $repo = new UsersInMemoryRepository();
         $user = new UserModel(1, 'Mārcis');
         $savedUser = $repo->saveOrCreate($user);
 
@@ -68,7 +68,7 @@ class UserTest extends TestCase
     /** @test */
     public function multipleUserSaving()
     {
-        $repo = new UserRepository();
+        $repo = new UsersInMemoryRepository();
 
         $user = new UserModel(2, 'Mārcis');
         $repo->saveOrCreate($user);

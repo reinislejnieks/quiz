@@ -5,7 +5,7 @@ namespace Quiz\Tests;
 use PHPUnit\Framework\TestCase;
 
 use Quiz\Models\UserAnswerModel;
-use Quiz\Repositories\UserAnswerRepository;
+use Quiz\Repositories\UserAnswerInMemoryRepository;
 
 class AnswerTest extends TestCase
 {
@@ -13,7 +13,7 @@ class AnswerTest extends TestCase
     public function submittedAnswerIsFound()
     {
 
-        $repo = new UserAnswerRepository;
+        $repo = new UserAnswerInMemoryRepository;
 
         $answer = new UserAnswerModel(1,666, 23321, 1117867, 234);
 //        $answer = new UserAnswerModel;
@@ -43,7 +43,7 @@ class AnswerTest extends TestCase
     /** @test */
     public function canWeSubmitAnswer()
     {
-        $repo = new UserAnswerRepository;
+        $repo = new UserAnswerInMemoryRepository;
 
         $answer = new UserAnswerModel(1,666, 23321, 1117867);
 

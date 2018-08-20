@@ -2,21 +2,30 @@
 
 namespace Quiz\Models;
 
-class UserModel
+class UserModel extends BaseModel
 {
-    public $id;
+    /** @var int */
+//    public $id;
+
+    /** @var string */
+    public $created_at;
+
+    /** @var string */
     public $name;
 
-    public function __construct(int $id = 0, string $name = '')
-    {
-        $this->id = $id;
-        $this->name = $name;
-    }
-
+    /**
+     * Check to see if user is new
+     * @return bool
+     */
     public function isNew(): bool
     {
-        return $this->id == 0;
+        return $this->id === 0;
     }
+
+    /**
+     * Check to see if user already exists
+     * @return bool
+     */
     public function exists(): bool
     {
         return !$this->isNew();

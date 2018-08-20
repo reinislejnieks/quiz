@@ -3,12 +3,21 @@
 namespace Quiz\Models;
 
 
-class UserAnswerModel
+class UserAnswerModel extends BaseModel
 {
+    /** @var int */
     public $id;
+
+    /** @var int */
     public $userId;
+
+    /** @var int */
     public $quizId;
+
+    /** @var int */
     public $answerId;
+
+    /** @var int */
     public $questionId;
 
     public function __construct(int $id = 0, int $userId = 0, $quizId = 0, $answerId = 0, $questionId = 0)

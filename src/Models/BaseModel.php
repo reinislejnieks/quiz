@@ -1,9 +1,22 @@
 <?php
+
 namespace Quiz\Models;
-abstract class BaseModel
+
+use \JsonSerializable;
+
+abstract class BaseModel implements JsonSerializable
 {
+    public function __construct(array $attributes = [])
+    {
+        $this->setAttributes($attributes);
+    }
+
+    /** @var int */
+    public $id;
+
     /**  @var bool */
     public $isNew = true;
+
     /** @var array */
     public $attributes;
 
@@ -12,12 +25,12 @@ abstract class BaseModel
         return $this->attributes;
     }
     // TODO: add this
-//    function setAttributes(array $attributes = [])
-//    {
-//        foreach ($attributes as $key => $value) {
-//            if (property_exists(static::class, $key)) {
-//                $instance->$key = $value;
-//            }
-//        }
-//    }
+    function setAttributes(array $attributes = [])
+    {
+        foreach ($attributes as $key => $value) {
+            if (property_exists(static::class, $key)) {
+                $this->$key = $value;
+            }
+        }
+    }
 }

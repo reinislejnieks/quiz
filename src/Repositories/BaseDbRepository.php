@@ -1,24 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: karlis
- * Date: 15/08/2018
- * Time: 22:30
- */
 
 namespace Quiz\Repositories;
 
-
-use Quiz\Database\ConnectionFactory;
 use Quiz\Interfaces\ConnectionInterface;
 use Quiz\Interfaces\RepositoryInterface;
 use Quiz\Models\BaseModel;
-use PDO;
 
-abstract class BaseDatabaseRepository implements RepositoryInterface
+abstract class BaseDbRepository implements RepositoryInterface
 {
     /** @var ConnectionInterface */
-    static $connection;
+    private $connection;
 
     /**
      * @param array $conditions
@@ -26,27 +17,15 @@ abstract class BaseDatabaseRepository implements RepositoryInterface
      */
     public function all(array $conditions = []): array
     {
-        $dataArray = static::getConnection()->select(static::getTableName(), $conditions);
+        $dataArray = $this->connection->select(static::getTableName(), $conditions);
 
         $instances = [];
 
         foreach ($dataArray as $data) {
-            $instances[] = static::init($data);
+            $instances[] = $this->init($data);
         }
 
         return $instances;
-    }
-
-    /**
-     * @return ConnectionInterface
-     */
-    final protected static function getConnection(): ConnectionInterface
-    {
-        if (!static::$connection) {
-            static::$connection = ConnectionFactory::getDriver();
-        }
-
-        return static::$connection;
     }
 
     /**
@@ -62,23 +41,21 @@ abstract class BaseDatabaseRepository implements RepositoryInterface
         return 'id';
     }
 
+    public function __construct(ConnectionInterface $connection)
+    {
+        $this->connection = $connection;
+    }
+
     /**
      * @param array $attributes
      * @return BaseModel
      */
-    public static function init(array $attributes)
+    public function init(array $attributes)
     {
         $class = static::modelName();
+        /** @var BaseModel $instance */
         $instance = new $class;
-        // TODO: Add this
-//        $instance->setAttributes($attributes); // new
-        foreach ($attributes as $key => $value) {
-            if (property_exists($class, $key)) {
-                $instance->$key = $value;
-            }
-        }
-        // TODO: Add this. Other part is in Base model
-//        static::prepareAttributes($instance); // new
+        $instance->setAttributes($attributes);
 
         return $instance;
     }
@@ -87,9 +64,9 @@ abstract class BaseDatabaseRepository implements RepositoryInterface
      * @param array $attributes
      * @return BaseModel
      */
-    public static function initLoaded(array $attributes)
+    public function initLoaded(array $attributes)
     {
-        $instance = static::init($attributes);
+        $instance = $this->init($attributes);
         $instance->isNew = false;
 
         return $instance;
@@ -97,7 +74,7 @@ abstract class BaseDatabaseRepository implements RepositoryInterface
 
     /**
      * @param int $id
-     * @return static
+     * @return BaseModel
      */
     public function getById(int $id)
     {
@@ -106,17 +83,18 @@ abstract class BaseDatabaseRepository implements RepositoryInterface
 
     /**
      * @param array $conditions
+     * @param array $select
      * @return BaseModel
      */
-    public function one(array $conditions = [])
+    public function one(array $conditions = [], array $select = [])
     {
-        $data = static::getConnection()->select(static::getTableName(), $conditions)[0] ?? [];
+        $data = array_first($this->connection->select(static::getTableName(), $conditions, $select));
 
         if (!$data) {
             return null;
         }
 
-        return static::initLoaded($data);
+        return $this->initLoaded($data);
     }
 
     /**
@@ -125,9 +103,12 @@ abstract class BaseDatabaseRepository implements RepositoryInterface
      */
     public function save($model): bool
     {
-        $connection = static::getConnection();
+        $connection = $this->connection;
+
         if ($model->isNew) {
-            return $connection->insert(static::getTableName(), static::getPrimaryKey(), $this->getAttributes($model));
+            $connection->insert(static::getTableName(), static::getPrimaryKey(), $this->getAttributes($model));
+            $model->id = $connection->getLastInsertId();
+            $this->prepareAttributes($model);
         }
 
         return $connection->update(static::getTableName(), static::getPrimaryKey(), $this->getAttributes($model));
@@ -139,9 +120,7 @@ abstract class BaseDatabaseRepository implements RepositoryInterface
      */
     public function getAttributes($model): array
     {
-        if (!$model->attributes) {
-            $model = $this->prepareAttributes($model);
-        }
+        $model = $this->prepareAttributes($model);
 
         return $model->attributes;
     }
@@ -152,7 +131,7 @@ abstract class BaseDatabaseRepository implements RepositoryInterface
      */
     protected function prepareAttributes($model)
     {
-        $columns = static::getConnection()->fetchColumns(static::getTableName());
+        $columns = $this->connection->fetchColumns(static::getTableName());
         $attributes = [];
 
         foreach ($columns as $column) {
@@ -164,5 +143,14 @@ abstract class BaseDatabaseRepository implements RepositoryInterface
         $model->attributes = $attributes;
 
         return $model;
+    }
+
+    /**
+     * @param array $attributes
+     * @return BaseModel
+     */
+    public function create(array $attributes = [])
+    {
+        return $this->init($attributes);
     }
 }

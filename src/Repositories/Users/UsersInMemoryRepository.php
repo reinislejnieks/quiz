@@ -1,10 +1,10 @@
 <?php
 
-namespace Quiz\Repositories;
+namespace Quiz\Repositories\Users;
 
 use Quiz\Models\UserModel;
 
-class UserRepository
+class UsersInMemoryRepository
 {
     /** @var UserModel[] */
     private $users = [];

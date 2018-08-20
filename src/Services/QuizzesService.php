@@ -6,33 +6,25 @@ use Quiz\Models\AnswerModel;
 use Quiz\Models\QuestionModel;
 use Quiz\Models\UserAnswerModel;
 use Quiz\Models\QuizModel;
-use Quiz\Models\UserModel;
-use Quiz\Repositories\QuizRepository;
-use Quiz\Repositories\UserAnswerRepository;
-use Quiz\Repositories\UserRepository;
+use Quiz\Repositories\Quizzes\QuizzesDbRepository;
 
-class QuizService
+class QuizzesService
 {
-    /** @var QuizRepository */
+    /** @var QuizzesDbRepository */
     private $quizzes;
 
-    /** @var UserRepository */
-    private $users;
-
-    /** @var UserAnswerRepository */
-    private $userAnswers;
+    /** @var UserAnswerInMemoryRepository */
+//    private $userAnswers;
 
     /** @var int */
     private $submitAnswerIndex = 0;
 
     public function __construct(
-        QuizRepository $quizzes,
-        UserRepository $users,
-        UserAnswerRepository $userAnswers
+        QuizzesDbRepository $quizzes/*,
+        UserAnswerInMemoryRepository $userAnswers*/
     ) {
         $this->quizzes = $quizzes;
-        $this->users = $users;
-        $this->userAnswers = $userAnswers;
+//        $this->userAnswers = $userAnswers;
     }
 
     /**
@@ -40,40 +32,10 @@ class QuizService
      *
      * @return QuizModel[]
      */
-    public function getQuizzes(): array
+    public function getQuizzes()
     {
-        return $this->quizzes->getList();
-    }
-
-    /**
-     * Register a new user
-     *
-     * @param string $name
-     * @return UserModel
-     */
-    public function registerUser(string $name): UserModel
-    {
-
-        $model = new UserModel;
-        $model->name = $name;
-
-        return $this->users->saveOrCreate($model);
-
-    }
-
-    /**
-     * Check if user exists in the system (is valid)
-     *
-     * @param int $userId
-     * @return bool
-     */
-    public function isExistingUser($userId): bool
-    {
-        $model = new UserModel;
-        $user = $model->getById($userId);
-
-        return $user->exists();
-
+        $results = $this->quizzes->all();
+        return $results;
     }
 
     /**

@@ -3,14 +3,14 @@
 namespace Quiz\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Quiz\Services\QuizService;
+use Quiz\Services\QuizzesService;
 use Quiz\Models\AnswerModel;
 use Quiz\Models\QuestionModel;
 use Quiz\Models\QuizModel;
 use Quiz\Models\UserModel;
 use Quiz\Repositories\QuizRepository;
-use Quiz\Repositories\UserAnswerRepository;
-use Quiz\Repositories\UserRepository;
+use Quiz\Repositories\UserAnswerInMemoryRepository;
+use Quiz\Repositories\UsersInMemoryRepository;
 
 class QuizServiceTest extends TestCase
 {
@@ -27,11 +27,11 @@ class QuizServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->userAnswerRepo = new UserAnswerRepository;
-        $this->userRepo = new UserRepository;
+        $this->userAnswerRepo = new UserAnswerInMemoryRepository;
+        $this->userRepo = new UsersInMemoryRepository;
         $this->quizRepo = new QuizRepository;
 
-        $this->service = new QuizService($this->quizRepo, $this->userRepo, $this->userAnswerRepo);
+        $this->service = new QuizzesService($this->quizRepo, $this->userRepo, $this->userAnswerRepo);
 
         $this->data = [
             'Country capitals' => [

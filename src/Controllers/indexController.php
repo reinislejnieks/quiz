@@ -2,23 +2,29 @@
 
 namespace Quiz\Controllers;
 
-use Quiz\Repositories\UserRepository;
-
+use Quiz\Repositories\Users\UsersDbRepository;
+use Quiz\Services\QuizzesService;
 class IndexController extends BaseController
 {
-    public function indexAction()
-    {
-//        echo 'ok';
-        $repo = new UserRepository();
-        $user = $repo->getById(1);
-//        echo  'this works';
-//        var_dump($user);
+    /** @var UsersDbRepository */
+    protected $usersDbRepository;
 
-        return $this->render('index', compact('user'));
+    protected $quizzesService;
+
+    public function __construct(UsersDbRepository $usersDbRepository, QuizzesService $quizzesService)
+    {
+        $this->usersDbRepository = $usersDbRepository;
+        $this->quizzesService = $quizzesService;
     }
 
-//    public function handleCall(string $action)
-//    {
-//        echo static::$action();
-//    }
+    public function indexAction()
+    {
+        $quizzes = $this->quizzesService->getQuizzes();
+        $user = $this->usersDbRepository->all();
+        if ($user === null) {
+            // TODO 404?
+        }
+
+        return $this->render('index', compact('user', 'quizzes'));
+    }
 }

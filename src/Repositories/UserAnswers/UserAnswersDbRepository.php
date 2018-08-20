@@ -1,9 +1,10 @@
 <?php
-namespace Quiz\Repositories;
-//use Quiz\Models\User;
-use Quiz\Models\UserModel;
 
-class UserDatabaseRepository extends BaseDatabaseRepository
+namespace Quiz\Repositories;
+
+use Quiz\Models\UserAnswerModel;
+
+class UserAnswersDbRepository extends BaseDbRepository
 {
     /**
      * Returns the corresponding model class name
@@ -11,15 +12,15 @@ class UserDatabaseRepository extends BaseDatabaseRepository
      */
     public static function modelName(): string
     {
-//        return User::class;
-        return UserModel::class;
+        return UserAnswerModel::class;
     }
     /**
+     * Returns relevant table name
+     *
      * @return string
      */
     public static function getTableName(): string
     {
-        return 'users';
+        return 'user_answers';
     }
-
 }

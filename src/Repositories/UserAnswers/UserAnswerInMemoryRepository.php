@@ -4,7 +4,7 @@ namespace Quiz\Repositories;
 
 use Quiz\Models\UserAnswerModel;
 
-class UserAnswerRepository
+class UserAnswerInMemoryRepository
 {
     /** @var UserAnswerModel[] */
     private $answers;
