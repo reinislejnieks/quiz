@@ -27,6 +27,7 @@ abstract class BaseModel implements JsonSerializable
     // TODO: add this
     function setAttributes(array $attributes = [])
     {
+        $this->attributes = $attributes;
         foreach ($attributes as $key => $value) {
             if (property_exists(static::class, $key)) {
                 $this->$key = $value;
