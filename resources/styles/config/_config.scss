@@ -1,0 +1,20 @@
+// spacing
+$lead: 1rem;
+
+// breakpoint sizes
+$m-old-phones: 320px;
+$m-phones: 480px;
+$m-tablets: 768px;
+$m-desktops: 992px;
+$m-wide-screens: 1200px;
+$m-ultra-wide: 1600px;
+
+// main colors
+$c-primary: #4AD361;
+$c-secondary:#282832;
+
+// other colors
+$c-body:$c-secondary;
+$c-links:$c-secondary;
+$c-links-hover:$c-secondary;
+$c-headlines:$c-secondary;

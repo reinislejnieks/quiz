@@ -1,0 +1,21 @@
+.l-header {
+  @include display-grid;
+  -ms-grid-columns: 1fr;
+  grid-template-columns: 1fr;
+  @media(min-width: $m-desktops) {
+    -ms-grid-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+  & > *:first-child {
+    @include grid-child(1, 2, 1, 2);
+    @media(min-width: $m-desktops) {
+      @include grid-child(1, 2, 1, 2);
+    }
+  }
+  & > *:last-child {
+    @include grid-child(1, 2, 2, 3);
+    @media(min-width: $m-desktops) {
+      @include grid-child(2, 3, 1, 2);
+    }
+  }
+}

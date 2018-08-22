@@ -24,6 +24,7 @@ abstract class BaseController
     public function handleCall(string $action)
     {
         $this->action = $action;
+
         $this->post = $this->prepareParams($_POST);
         $this->get = $this->prepareParams($_GET);
 

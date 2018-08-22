@@ -1,40 +1,73 @@
 <template>
-    <div>
-        <input type="text" v-model="name">
-        <select v-model="activeQuizId">
-            <option v-for="quiz in allQuizzes" :value="quiz.id">{{ quiz.name }}</option>
-        </select>
-        <button @click="onStart">Start</button>
+    <div class="wrap">
+        <div class="header l-header">
+            <div class="logo">
+                <Logo/>
+            </div>
+            <div class="login">
+                <a class="link" href="#">Pieslēgties / Reģistrēties</a>
+            </div>
+        </div>
+        <div v-if="!activeQuestion && !results">
+            <input type="text" v-model="name">
+            <select v-model="activeQuizId">
+                <option v-for="quiz in allQuizzes" :value="quiz.id">{{ quiz.name }}</option>
+            </select>
+            <button @click="onStart">Start</button>
+        </div>
+        <div v-else-if="activeQuestion">
+            <div>Hello, {{name}}!</div>
+            <QuestionItem/>
+        </div>
+
+        <Results/>
     </div>
 </template>
 <script>
     import {mapActions} from 'vuex';
+    import Quiz from '../models/model.quiz.js';
+    import QuestionItem from './QuestionItem';
+    import Results from './Results';
+    // import Logo from './Logo';
+    import Logo from '../assets/logo.svg';
 
-    export default{
+    // import TextInput from
+
+    export default {
         name: 'Quiz',
+        components: {QuestionItem, Results, Logo},
         computed: {
-            name:{
-                get(){
+            name: {
+                get() {
                     return this.$store.state.name;
                 },
-                set(newName){
+                set(newName) {
                     this.setName(newName);
                 }
             },
             activeQuizId: {
-                get(){
+                get() {
                     return this.$store.state.activeQuizId;
                 },
-                set(newValue){
+                set(newValue) {
                     // this.$store.commit('setActiveValueId', newValue);
-                    console.log(newValue);
                     this.setActiveQuizId(newValue);
                 }
             },
             allQuizzes: {
-                get(){
+                get() {
                     return this.$store.state.allQuizzes;
 
+                }
+            },
+            activeQuestion: {
+                get() {
+                    return this.$store.state.activeQuestion;
+                }
+            },
+            results: {
+                get() {
+                    return this.$store.state.result;
                 }
             }
         },
@@ -44,12 +77,12 @@
             'setName',
             'start',
         ]), {
-            onStart(){
-                if(!this.name){
+            onStart() {
+                if (!this.name) {
                     console.log('no name');
                     return;
                 }
-                if(!this.activeQuizId){
+                if (!this.activeQuizId) {
                     console.log('no active id');
                     return;
                 }
@@ -59,6 +92,6 @@
         }),
         created() {
             this.setAllQuizzes();
-         }
+        }
     }
 </script>

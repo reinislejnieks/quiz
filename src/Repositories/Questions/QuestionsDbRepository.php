@@ -1,8 +1,9 @@
 <?php
 
-namespace Quiz\Repositories;
+namespace Quiz\Repositories\Questions;
 
 use Quiz\Models\QuestionModel;
+use Quiz\Repositories\BaseDbRepository;
 
 class QuestionsDbRepository extends BaseDbRepository
 {

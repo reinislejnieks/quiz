@@ -18,6 +18,7 @@ function run()
     $controllerName = ucfirst(array_shift($urlParams));
     $controllerName = $config->get('controllerNamespace') .
         ($controllerName ? $controllerName : 'Index') . 'Controller';
+//        ($controllerName ?? 'Index') . 'Controller';
     $actionName = strtolower(array_shift($urlParams));
     $actionName = ($actionName ? $actionName : 'index') . 'Action';
     /** @var BaseController $controller */

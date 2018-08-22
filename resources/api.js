@@ -20,9 +20,16 @@ export default class Api{
         return Vue.axios.get(this.buildUrl(action), params ? params : {});
     }
     post(action, params){
-        return Vue.axios.post(this.buildUrl(action), params ? params : {});
+        return Vue.axios.post(this.buildUrl(action), params ? Api.parseParams(params) : {});
     }
     buildUrl(url){
         return '/' + this.controllerName + '/' + url;
+    }
+    static parseParams(object){
+        let params = new URLSearchParams();
+        for(let key in object){
+            params.append(key, object[key]);
+        }
+        return params;
     }
 }

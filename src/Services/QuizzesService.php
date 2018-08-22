@@ -6,22 +6,31 @@ use Quiz\Models\AnswerModel;
 use Quiz\Models\QuestionModel;
 use Quiz\Models\UserAnswerModel;
 use Quiz\Models\QuizModel;
+use Quiz\Repositories\Questions\QuestionsDbRepository;
 use Quiz\Repositories\Quizzes\QuizzesDbRepository;
+use Quiz\Repositories\Answers\AnswersDbRepository;
 
 class QuizzesService
 {
     /** @var QuizzesDbRepository */
     private $quizzes;
 
-    /** @var UserAnswerInMemoryRepository */
-//    private $userAnswers;
+    /** @var QuestionsDbRepository */
+    private $questions;
 
+    private $answers;
     /** @var int */
     private $submitAnswerIndex = 0;
 
-    public function __construct(QuizzesDbRepository $quizzes)
+    public function __construct(
+        QuizzesDbRepository $quizzes,
+        QuestionsDbRepository $questions,
+        AnswersDbRepository $answers
+    )
     {
         $this->quizzes = $quizzes;
+        $this->questions = $questions;
+        $this->answers = $answers;
     }
 
     /**
@@ -43,11 +52,40 @@ class QuizzesService
      * @param $quizId
      * @return QuestionModel[]
      */
-    public function getQuestions(int $quizId): array
+    public function getAllQuestions(int $quizId): array
     {
-        return $this->quizzes->getQuestions($quizId);
+//        return $this->quizzes->getQuestions($quizId);
+        return $this->questions->all(['quiz_id' => $quizId]);
     }
 
+    /**
+     * Get list of question for a specific quiz
+     *
+     * @param int $quizId
+     * @param int $questionIndex
+     *
+     * @return QuestionModel[]
+     */
+    public function getQuestion(int $quizId = 1, int $questionIndex = 0)
+    {
+        $data = [];
+        // get questions with answers
+        $allQuestions = $this->getAllQuestions($quizId);
+        for($i = 0; $i < count($allQuestions); $i++){
+            $data[$i]['id'] =  $allQuestions[$i]->id;
+            $data[$i]['question'] =  $allQuestions[$i]->question;
+
+            // get answers for current question
+            $answers = $this->getAnswers($allQuestions[$i]->id);
+            for($j = 0; $j < count($answers); $j++){
+                $data[$i]['answers'][$j]['id'] = $answers[$j]->id;
+                $data[$i]['answers'][$j]['answer'] = $answers[$j]->answer;
+            }
+        }
+//        var_dump($data);
+        return $data[$questionIndex] ?? 'Done, thank you for taking the test!';
+
+    }
     /**
      * Get list of available answers for this question
      *
@@ -56,7 +94,7 @@ class QuizzesService
      */
     public function getAnswers(int $questionId): array
     {
-        return $this->quizzes->getAnswers($questionId);
+        return $this->answers->all(['question_id' => $questionId]);
     }
 
     /**
