@@ -41,8 +41,6 @@ class QuizzesService
     public function getQuizzes()
     {
         $results = $this->quizzes->all();
-//        $file = 'test2.txt';
-//        file_put_contents($file, json_encode($results));
         return $results;
     }
 
@@ -82,7 +80,6 @@ class QuizzesService
                 $data[$i]['answers'][$j]['answer'] = $answers[$j]->answer;
             }
         }
-//        var_dump($data);
         return $data[$questionIndex] ?? 'Done, thank you for taking the test!';
 
     }

@@ -1,14 +1,35 @@
 export default class Quizz {
-    constructor(){
+    constructor() {
+        /**
+         * @type {?number}
+         */
         this.id = null;
+
+        /**
+         * @type {?string}
+         */
         this.name = '';
     }
 
-    static fromArray(rawData){
-        let quiz = new Quizz();
-        quiz.id = rawData.id;
-        quiz.name = rawData.name;
+    /**
+     * @param {{}} rawData
+     * @return {Quizz}
+     */
+    static fromArray(rawData) {
+        let quizz = new Quizz();
+        quizz.id = rawData.id;
+        quizz.name = rawData.name;
 
-        return quiz;
+        return quizz;
+    }
+
+    /**
+     * @return {{}}
+     */
+    toArray() {
+        return {
+            id: this.id,
+            name: this.name,
+        }
     }
 }

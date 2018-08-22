@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as types from './mutations.js';
-import Quiz from '../models/model.quiz.js';
+import Quizz from '../models/model.quiz.js';
 
 import QuizRepository from '../repositories/repository.quiz.js';
 import Question from '../models/model.question';

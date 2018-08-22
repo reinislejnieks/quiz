@@ -56,11 +56,11 @@
         ]), {
             onStart() {
                 if (!this.name) {
-                    alert('Give me your name');
+                    console.log('Give me your name');
                     return;
                 }
                 if (!this.activeQuizId) {
-                    alert('Pick a quiz!');
+                    console.log('Pick a quiz!');
                     return;
                 }
                 this.start();
