@@ -1,6 +1,11 @@
 <?php
-//var_dump($user);
-//var_dump($quizzes);
+use Quiz\Services\QuizzesService;
+$service = app(QuizzesService::class);
+
+$results = $service->getQuestion();
+var_dump($results );
+echo 'works';
+?>
 
 ?>
 <div class="container">
