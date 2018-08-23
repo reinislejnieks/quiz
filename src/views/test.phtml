@@ -1,80 +1,41 @@
 <?php
 use Quiz\Services\QuizzesService;
-$service = app(QuizzesService::class);
+use Quiz\Services\UsersService;
 
-$results = $service->getQuestion();
-var_dump($results );
-echo 'works';
-?>
+$quizService = app(QuizzesService::class);
+$usersService = app(UsersService::class);
+
+//$results = $quizService->getQuestion();
+//var_dump($results );
+//var_dump($res);
+
 
 ?>
 <div class="container">
-    <form id="user-form" action="/ajax/saveUser">
-        <input id="name" type="text" name="username">
-        <input type="submit" value="Send">
+    <form id="user-form" method="POST" action="<?= "ajax/saveUser"; ?>">
+        <label for="name">Vārds</label>
+        <input type="text" id="name" name="name">
+        <button type="submit">Save</button>
     </form>
 </div>
 <script>
     (function () {
-        let form = document.getElementById('user-form');
-        form.addEventListener("submit", function (evt) {
-            evt.preventDefault();
-            // let name = document.getElementById("name");
-            let name = 'zanis';
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/ajax/start');
-            // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-
-            xhr.onload = function () {
-                if (xhr.status !== 200) {
-                    return console.log("Error!");
-                }
-                console.log('Resp: ', xhr.responseText);
-                // let response = JSON.parse(xhr.responseText);
-                //
-                // if (response.message === 0) {
-                //     return console.log(response.error);
-                // }
-                return console.log("Seuccess!");
-            };
-
-            // let data = 'name=' + name;
-
-            let data = {'name': name, 'quizId':1};
-
-            xhr.send(JSON.stringify(data));
-        });
-        // getting quiz list
-        // function reqListener () {
-        //     let response = JSON.parse(this.responseText);
-        //     console.log(response);
-        // }
-        // let oReq = new XMLHttpRequest();
-        // oReq.addEventListener("load", reqListener);
-        // oReq.open("GET", "/getQuizzesAjax/getQuizzes");
-        // oReq.send();
-        function getApi(apiRoute, callback){
-            let request = new XMLHttpRequest();
-
-            request.onreadystatechange = function() {
-              if (request.status === 200) {
-                  callback(response);
-              }
-            };
-            request.addEventListener('load', dataHandler);
-            request.open('GET', apiRoute, true); //sends to the API you include
-            request.send();
-            request.setRequestHeader('Content-Type', 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8');
-
-            function dataHandler(response){
-                //this passes "this.responseText" to your callback function
-                callback(response);
+        let form = document.querySelector('#user-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            let formData = new FormData;
+            let inputs = form.querySelectorAll('input');
+            for (let i = 0; i < inputs.length; i++) {
+                formData.append(inputs[i].name, inputs[i].value);
             }
-        }
-        // getApi('/ajax/getQuizzes', function(data) {
-        //     console.log(data);
-        // });
-
+            let xhr = new XMLHttpRequest();
+            xhr.open(form.method, form.action, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log(xhr.response);
+                }
+            };
+            xhr.send(formData);
+        });
     })();
 </script>

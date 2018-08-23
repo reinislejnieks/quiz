@@ -2,8 +2,8 @@
 
 namespace Quiz\Services;
 
-
-use Quiz\Models\UserModel;
+use Quiz\Models\BaseModel;
+use Quiz\Repositories\SessionRepository;
 use Quiz\Repositories\Users\UsersDbRepository;
 
 class UsersService
@@ -11,38 +11,82 @@ class UsersService
     /** @var UsersDbRepository */
     protected $usersDbRepository;
 
-    public function __construct(UsersDbRepository $usersDbRepository)
+    /** @var SessionRepository */
+    protected $sessionRepository;
+
+    /** @var string */
+    const DATE_FORMAT = 'Y-m-d H:i:s';
+
+    /** @var string */
+    const SESSION_USER_ID_KEY_NAME = 'userId';
+
+    public function __construct(UsersDbRepository $usersDbRepository, SessionRepository $sessionRepository)
     {
         $this->usersDbRepository = $usersDbRepository;
+
+        $this->sessionRepository = $sessionRepository;
+        $this->sessionRepository::getInstance()->start();
     }
+
+
     /**
-     * Register a new user
-     *
      * @param string $name
+     *
      * @return bool
      */
-    public function registerUser(string $name): bool
+    public function processUser(string $name)
     {
-        /** @var User $user */
+        $user = $this->getUserByName($name);
+        if($user){
+            $this->sessionRepository::getInstance()->setSessionKey(self::SESSION_USER_ID_KEY_NAME, $user->id);
+            return true;
+        }
+        return $this->createUser($name);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function createUser(string $name): bool
+    {
         $user = $this->usersDbRepository->create();
         $user->name = $name;
-        $user->created_at = date("Y-m-d H:i:s");
-        $result = $this->usersDbRepository->save($user);
-        return $result;
+        $user->created_at = date(self::DATE_FORMAT);
+        $isUserSaved = $this->usersDbRepository->save($user);
+        if($isUserSaved){
+            $this->sessionRepository::getInstance()->setSessionKey(self::SESSION_USER_ID_KEY_NAME, $user->id);
+            return $isUserSaved;
+        }
+        return false;
     }
-    /**
-     * TODO: Check if user exists in the system (is valid)
-     *
-     * @param int $userId
-     * @return bool
-     */
-//    public function isExistingUser($userId): bool
-//    {
-//        $model = new UserModel;
-//        $user = $model->getById($userId);
-//
-//        return $user->exists();
-//
-//    }
 
+    /**
+     * @return int
+     */
+    public function getCurrentUserId(): int
+    {
+        return $this->sessionRepository::getInstance()->getSessionKey(self::SESSION_USER_ID_KEY_NAME);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getUserByName(string $name)
+    {
+        return $this->usersDbRepository->getByName($name);
+    }
+
+    /**
+     * @param $userId
+     *
+     * @return BaseModel
+     */
+    public function getUserById($userId): BaseModel
+    {
+        return $this->usersDbRepository->getById($userId);
+    }
 }

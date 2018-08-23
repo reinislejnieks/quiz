@@ -24,7 +24,6 @@ abstract class BaseModel implements JsonSerializable
     {
         return $this->attributes;
     }
-    // TODO: add this
     function setAttributes(array $attributes = [])
     {
         $this->attributes = $attributes;

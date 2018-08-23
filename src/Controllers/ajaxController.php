@@ -2,6 +2,7 @@
 
 namespace Quiz\Controllers;
 
+use Quiz\Models\UserModel;
 use Quiz\Services\QuizzesService;
 use Quiz\Services\UsersService;
 
@@ -29,21 +30,29 @@ class ajaxController extends BaseAjaxController
         return $data;
     }
 
-//    public function saveUserAction(): bool
-//    {
-//        $name = $this->post->get('name');
-//        $result = $this->usersService->registerUser($name);
-//        return $result;
-//    }
+    public function saveUserAction()
+    {
+        $name = $this->post->get('name');
+        $this->usersService->processUser($name);
+    }
 
     public function startAction(): array
     {
-        // getting thing from request
         $userName = $this->post->get('name');
         $quizId = $this->post->get('quizId');
 
-        // registering or returning already registered user
-        $user = $this->usersService->registerUser($userName);
+        $this->usersService->processUser($userName);
+
+        // has user already submitted answers to this test
+        // -- if so, how much has been submitted if quiz have
+        // 4 questions and user has submitted 2 they most likely
+        // are the first two, so question index needs to be 2
+
+        // 1. yes, has already answered all q
+        // 2. no, has not answered to all q
+        // 3. has not
+
+
 
         // setting current question in session
         $questionIndex = 0;

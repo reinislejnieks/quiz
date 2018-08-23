@@ -6,9 +6,6 @@ namespace Quiz\Models;
 class UserAnswerModel extends BaseModel
 {
     /** @var int */
-    public $id;
-
-    /** @var int */
     public $userId;
 
     /** @var int */

@@ -137,32 +137,6 @@ class QuizzesService
      */
     public function getScore(int $userId, int $quizId): int
     {
-        // if is quiz completed
-        // get right answers
-        // get answer count
-
-
-//        $correctAnswers = [];
-//
-//        $allQuizQuestions = $this->quizzes->getQuestions($quizId);
-//        print_r($allQuizQuestions);
-//        $allUserAnswers = $this->userAnswers->getAnswers($userId, $quizId);
-//
-//        // which answers are correct?
-//        foreach ($allUserAnswers as $userAnswer) {
-//
-//            // TODO: needs refactoring
-//            $answerToTest = $this->quizzes->getAnswerById($userAnswer->answerId);
-//            if($answerToTest->isCorrect){
-//                $correctAnswers[] = $answerToTest;
-//            }
-//
-//        }
-//        print_r($correctAnswers);
-//        return round(count($correctAnswers) / count($allQuizQuestions) * 100);
-
-
-        //
         $rightAnswers = [];
 
         $allQuestions = $this->getQuestions($quizId);
@@ -176,9 +150,9 @@ class QuizzesService
         }
 
         $correctUserAnswers = [];
-//        print_r($rightAnswers );
+
         $allUserAnswers = $this->userAnswers->getAnswers($userId, $quizId);
-//        print_r($allUserAnswers );
+
         foreach ($allUserAnswers as $theAnswer) {
             foreach ($rightAnswers as $rightAnswer) {
                 if ($theAnswer->answerId == $rightAnswer->id) {

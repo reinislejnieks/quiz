@@ -1,6 +1,7 @@
 <?php
 namespace Quiz\Repositories\Users;
 //use Quiz\Models\User;
+use Quiz\Models\BaseModel;
 use Quiz\Models\UserModel;
 use Quiz\Repositories\BaseDbRepository;
 
@@ -23,6 +24,12 @@ class UsersDbRepository extends BaseDbRepository
     public static function getTableName(): string
     {
         return 'users';
+    }
+
+
+    public function getByName(string $name)
+    {
+        return $this->one(['name' => $name]);
     }
 
 }

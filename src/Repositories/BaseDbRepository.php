@@ -76,7 +76,7 @@ abstract class BaseDbRepository implements RepositoryInterface
      * @param int $id
      * @return BaseModel
      */
-    public function getById(int $id)
+    public function getById(int $id): BaseModel
     {
         return $this->one(['id' => $id]);
     }

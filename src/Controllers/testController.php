@@ -5,7 +5,7 @@ namespace Quiz\Controllers;
 use Quiz\Services\QuizzesService;
 use Quiz\Services\UsersService;
 
-class TestController extends BaseAjaxController
+class TestController extends BaseController
 {
     /** @var QuizzesService */
     protected $quizzesService;
@@ -21,7 +21,12 @@ class TestController extends BaseAjaxController
 
     public function indexAction(){
 
-        $user = '';
-        return $this->render('test', compact('user'));
+        $user = 'reinis';
+        $this->usersService->processUser($user);
+        $cUser = $this->usersService->getCurrentUserId();
+        var_dump($cUser);
+
+        var_dump($this->usersService->getUserById($cUser));
+        return $this->render('test', compact('res'));
     }
 }
