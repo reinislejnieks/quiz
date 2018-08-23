@@ -53,7 +53,6 @@ class ajaxController extends BaseAjaxController
         // 3. has not
 
 
-
         // setting current question in session
         $questionIndex = 0;
         $_SESSION['questionIndex'] = $questionIndex;
@@ -62,12 +61,19 @@ class ajaxController extends BaseAjaxController
         return $this->quizzesService->getQuestion($quizId, $questionIndex);
 
     }
+
     public function answerAction()
     {
+        $index = $_SESSION['questionIndex'] ?? 0;
         $answerId = $this->post->get('answerId');
         $quizId = $this->post->get('quizId');
 
-        $index = $_SESSION['questionIndex'] ?? 0;
+        $this->quizzesService->submitAnswer([
+            'userId' => '',
+            'quizId' => $quizId,
+            'answerId' => $answerId,
+        ]);
+
         $index++;
         $_SESSION['questionIndex'] = $index;
 

@@ -153,4 +153,15 @@ abstract class BaseDbRepository implements RepositoryInterface
     {
         return $this->init($attributes);
     }
+
+    /**
+     * @param array $attributes
+     *
+     * @return bool
+     */
+    public function submit(array $attributes): bool
+    {
+        $model = $this->create($attributes);
+        return $this->save($model);
+    }
 }

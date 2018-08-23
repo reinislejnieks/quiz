@@ -28,4 +28,5 @@ class QuizzesDbRepository extends BaseDbRepository
 //    {
 //         TODO
 //    }
+
 }

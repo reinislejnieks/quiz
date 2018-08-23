@@ -15,9 +15,6 @@ class UsersService
     protected $sessionRepository;
 
     /** @var string */
-    const DATE_FORMAT = 'Y-m-d H:i:s';
-
-    /** @var string */
     const SESSION_USER_ID_KEY_NAME = 'userId';
 
     public function __construct(UsersDbRepository $usersDbRepository, SessionRepository $sessionRepository)
@@ -28,7 +25,6 @@ class UsersService
         $this->sessionRepository::getInstance()->start();
     }
 
-
     /**
      * @param string $name
      *
@@ -36,7 +32,8 @@ class UsersService
      */
     public function processUser(string $name)
     {
-        $user = $this->getUserByName($name);
+        $user = $this->usersDbRepository->getByName($name);
+
         if($user){
             $this->sessionRepository::getInstance()->setSessionKey(self::SESSION_USER_ID_KEY_NAME, $user->id);
             return true;
@@ -53,7 +50,6 @@ class UsersService
     {
         $user = $this->usersDbRepository->create();
         $user->name = $name;
-        $user->created_at = date(self::DATE_FORMAT);
         $isUserSaved = $this->usersDbRepository->save($user);
         if($isUserSaved){
             $this->sessionRepository::getInstance()->setSessionKey(self::SESSION_USER_ID_KEY_NAME, $user->id);
@@ -75,10 +71,10 @@ class UsersService
      *
      * @return mixed
      */
-    public function getUserByName(string $name)
-    {
-        return $this->usersDbRepository->getByName($name);
-    }
+//    public function getUserByName(string $name)
+//    {
+//        return $this->usersDbRepository->getByName($name);
+//    }
 
     /**
      * @param $userId

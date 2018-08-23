@@ -94,18 +94,15 @@ class QuizzesService
         return $this->answers->all(['question_id' => $questionId]);
     }
 
+
     /**
-     * Submit current users answer
+     * @param array $attributes
      *
-     * @param int $userId
-     * @param int $quizId
-     * @param int $questionId
-     * @param int $answerId
+     * @return bool
      */
-    public function submitAnswer(int $userId, int $quizId, int $questionId, int $answerId)
+    public function submitAnswer(array $attributes): bool
     {
-        $model = new UserAnswerModel(++$this->submitAnswerIndex, $userId, $quizId, $questionId, $answerId);
-        $this->userAnswers->saveAnswer($model);
+        return $this->answers->submit($attributes);
     }
 
     /**
