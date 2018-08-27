@@ -4,15 +4,17 @@ namespace Quiz\Models;
 
 class UserModel extends BaseModel
 {
-    /** @var int */
-//    public $id;
-
-    /** @var string */
-    public $created_at;
 
     /** @var string */
     public $name;
 
+    /** @var int */
+    public $lastQuestionIndex;
+
+    public function setLastQuestionIndex($index)
+    {
+        $this->lastQuestionIndex = $index;
+    }
     /**
      * Check to see if user is new
      * @return bool

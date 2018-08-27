@@ -1,8 +1,9 @@
 <?php
 
-namespace Quiz\Repositories;
+namespace Quiz\Repositories\UserAnswers;
 
 use Quiz\Models\UserAnswerModel;
+use Quiz\Repositories\BaseDbRepository;
 
 class UserAnswersDbRepository extends BaseDbRepository
 {
@@ -21,6 +22,22 @@ class UserAnswersDbRepository extends BaseDbRepository
      */
     public static function getTableName(): string
     {
-        return 'user_answers';
+        return 'userAnswers';
+    }
+
+
+    /**
+     * @param int $userId
+     * @param int $quizId
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function getUserAnswers(int $userId, int $quizId, int $limit): array
+    {
+        return $this->all([
+            'userId' => $userId,
+            'quizId' => $quizId
+        ], $limit);
     }
 }

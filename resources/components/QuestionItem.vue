@@ -1,12 +1,14 @@
 <template>
-    <div>
-        <h1>{{ question.question }}</h1>
-        <ul>
-            <li v-for="answer in question.answers">
+    <div >
+        <div class="question">
+            <h2 class="question__headline">{{ question.question }}</h2>
+        </div>
+        <ul class="answers l-question">
+            <li class="answers__item" v-for="answer in question.answers">
                 <AnswerItem :answer="answer" :on-answered="onAnswerPicked"/>
             </li>
         </ul>
-        <button @click="onAnswered">Next question</button>
+        <button class="btn" @click="onAnswered">Nākošais jautājums</button>
     </div>
 </template>
 <script>

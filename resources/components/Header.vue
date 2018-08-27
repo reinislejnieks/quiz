@@ -3,9 +3,7 @@
         <div class="logo">
             <Logo />
         </div>
-        <div class="login">
-            <a class="link" href="#">Pieslēgties / Reģistrēties</a>
-        </div>
+
     </div>
 </template>
 <script>

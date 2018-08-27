@@ -9,72 +9,52 @@ use Quiz\Repositories\Users\UsersDbRepository;
 class UsersService
 {
     /** @var UsersDbRepository */
-    protected $usersDbRepository;
+    protected $users;
 
     /** @var SessionRepository */
-    protected $sessionRepository;
+    protected $session;
 
     /** @var string */
     const SESSION_USER_ID_KEY_NAME = 'userId';
 
-    public function __construct(UsersDbRepository $usersDbRepository, SessionRepository $sessionRepository)
+    public function __construct(UsersDbRepository $users, SessionRepository $session)
     {
-        $this->usersDbRepository = $usersDbRepository;
+        $this->users = $users;
 
-        $this->sessionRepository = $sessionRepository;
-        $this->sessionRepository::getInstance()->start();
+        $this->session = $session;
     }
 
     /**
      * @param string $name
      *
-     * @return bool
+     * @return BaseModel
      */
-    public function processUser(string $name)
+    public function processUser(string $name): BaseModel
     {
-        $user = $this->usersDbRepository->getByName($name);
+        $user = $this->users->getByName($name);
 
-        if($user){
-            $this->sessionRepository::getInstance()->setSessionKey(self::SESSION_USER_ID_KEY_NAME, $user->id);
-            return true;
+        if ($user->isNew) {
+//            var_dump($user);
+            return $this->createUser($user);
         }
-        return $this->createUser($name);
+        return $user;
     }
 
     /**
-     * @param string $name
+     * @param BaseModel $user
      *
-     * @return bool
+     * @return BaseModel
      */
-    public function createUser(string $name): bool
+    public function createUser(BaseModel $user): BaseModel
     {
-        $user = $this->usersDbRepository->create();
-        $user->name = $name;
-        $isUserSaved = $this->usersDbRepository->save($user);
-        if($isUserSaved){
-            $this->sessionRepository::getInstance()->setSessionKey(self::SESSION_USER_ID_KEY_NAME, $user->id);
-            return $isUserSaved;
+//        $user = $this->users->submit(['name' => $name]);
+        $newUser = $this->users->submitModel($user);
+        if (!$newUser->isNew) {
+//        var_dump($newUser);
+            $this->session->set(self::SESSION_USER_ID_KEY_NAME, $newUser->id);
         }
-        return false;
+        return $newUser;
     }
-
-    /**
-     * @return int
-     */
-    public function getCurrentUserId(): int
-    {
-        return $this->sessionRepository::getInstance()->getSessionKey(self::SESSION_USER_ID_KEY_NAME);
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return mixed
-     */
-//    public function getUserByName(string $name)
-//    {
-//        return $this->usersDbRepository->getByName($name);
-//    }
 
     /**
      * @param $userId
@@ -83,6 +63,73 @@ class UsersService
      */
     public function getUserById($userId): BaseModel
     {
-        return $this->usersDbRepository->getById($userId);
+        return $this->users->getById($userId);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCurrentUserIp(): string
+    {
+
+        $defaultIp = '127.0.0.1';
+
+        $enVars = [
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',
+            'HTTP_FORWARDED_FOR',
+            'HTTP_FORWARDED',
+            'REMOTE_ADDR',
+        ];
+
+        foreach ($enVars as $enVar) {
+
+            if (isset($_SERVER[$enVar])) {
+                return $_SERVER[$enVar];
+            }
+
+        }
+        return $defaultIp;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentUserId()
+    {
+        return $this->session->get(self::SESSION_USER_ID_KEY_NAME);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return BaseModel
+     */
+    public function getLastQuestionIndex(int $userId): BaseModel
+    {
+        return $this->users->getById($userId);
+    }
+
+    /**
+     * @param int $userId
+     * @param int $index
+     *
+     * @return BaseModel
+     */
+    public function setLastQuestionIndex(int $userId, int $index): BaseModel
+    {
+        $user = $this->getUserById($userId);
+//        $user->setAttributes(['lastQuestionIndex' => $index]);
+        $user->setLastQuestionIndex($index);
+
+//        $model = $this->users->create([
+//            'id' => $userId,
+//            'name' => $this->getUserById($userId)->name,
+//            'isNew' => false,
+//            'lastQuestionIndex' => $index,
+//        ]);
+//        return $this->users->submitModel($model);
+        return $this->users->submitModel($user);
     }
 }

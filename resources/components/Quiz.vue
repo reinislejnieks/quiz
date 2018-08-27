@@ -1,9 +1,9 @@
 <template>
-    <div class="wrap">
-        <Header />
-        <Intro />
-        <MainFlow />
-        <Results />
+    <div class="container">
+        <Header/>
+        <Intro/>
+        <MainFlow/>
+        <Results/>
     </div>
 </template>
 

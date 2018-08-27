@@ -24,4 +24,14 @@ class QuestionsDbRepository extends BaseDbRepository
     {
         return 'questions';
     }
+
+    /**
+     * @param int $quizId
+     *
+     * @return array
+     */
+    public function getAllQuestions(int $quizId): array
+    {
+        return $this->all(['quizId' => $quizId]);
+    }
 }

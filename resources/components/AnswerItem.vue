@@ -1,5 +1,5 @@
 <template>
-    <a href="#" @click="onAnswerPicked">{{ answer.answer }}</a>
+    <a class="answers__link" href="#" @click="onAnswerPicked">{{ answer.answer }}</a>
 </template>
 <script>
     import Answer from '../models/model.answer.js';

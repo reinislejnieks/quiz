@@ -1,9 +1,15 @@
 <template>
-    <div v-if="!activeQuestion && !result">
-        <TextInput v-model="name" label="Your name" />
-        <SelectDropdown v-model="activeQuizId" label="Pick your quiz" :options="getQuizzes()" />
+    <div v-if="!activeQuestion && !result" class="l-main main">
         <div>
-            <button @click="onStart">Start</button>
+            <div class="intro">
+                <h1 class="intro__headline">Hei, vēlies pārbaudīt, kādas ir Tavas spējas?</h1>
+                <p class="intro__text">Izvēlies kādu no tēmām, izpildi testu un noskaidro!</p>
+            </div>
+            <div class="login form">
+                <TextInput v-model="name" label="Tavs vārds" />
+                <SelectDropdown v-model="activeQuizId" label="Izvēlies testu" :options="getQuizzes()" />
+                <button class="form__submit btn" @click="onStart">Sākt pildīt testu!</button>
+            </div>
         </div>
     </div>
 </template>

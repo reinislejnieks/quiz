@@ -1,7 +1,9 @@
 <template>
-    <div v-if="results">
-         <div>{{ results }}</div>
-        <button @click="restart">Start again</button>
+    <div class="l-main main" v-if="results">
+        <div>
+             <div class="intro">{{ results }}</div>
+            <button class="btn" @click="restart">Pildīt citu testu</button>
+        </div>
     </div>
 </template>
 <script>

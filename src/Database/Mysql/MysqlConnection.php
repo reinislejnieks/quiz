@@ -111,9 +111,11 @@ class MysqlConnection implements ConnectionInterface
      * @param string $table
      * @param array $conditions
      * @param array $columns
+     * @param int $limit
+     *
      * @return array
      */
-    public function select(string $table, array $conditions = [], array $columns = []): array
+    public function select(string $table, array $conditions = [], array $columns = [], int $limit = 0): array
     {
         $conditionSql = '';
         if ($conditions) {
@@ -124,6 +126,9 @@ class MysqlConnection implements ConnectionInterface
             }
 
             $conditionSql .= implode(' AND ', $conditionStatements);
+            if($limit){
+                $conditionSql .= ' ORDER BY id DESC LIMIT ' . $limit;
+            }
         }
 
         if (!$columns) {

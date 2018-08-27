@@ -27,9 +27,18 @@ class UsersDbRepository extends BaseDbRepository
     }
 
 
+    /**
+     * @param string $name
+     *
+     * @return BaseModel
+     */
     public function getByName(string $name)
     {
-        return $this->one(['name' => $name]);
+        $user = $this->one(['name' => $name]);
+        if($user){
+            return $user;
+        }
+        return $this->create(['name'=>$name]);
     }
 
 }

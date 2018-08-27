@@ -8,9 +8,11 @@ interface ConnectionInterface
      * @param string $table
      * @param array $conditions
      * @param array $columns
+     * @param int $limit
+     *
      * @return array
      */
-    public function select(string $table, array $conditions = [], array $columns = []): array;
+    public function select(string $table, array $conditions = [], array $columns = [], int $limit): array;
 
     /**
      * @param string $table

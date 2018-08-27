@@ -1,5 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:300,400,500,700&subset=latin-ext');
+
 // spacing
 $lead: 1rem;
+
+// font stack
+$stack:-apple-system, 'Fira Sans', BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
 // breakpoint sizes
 $m-old-phones: 320px;

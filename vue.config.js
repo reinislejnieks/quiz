@@ -1,7 +1,6 @@
 module.exports = {
     filenameHashing: false,
     outputDir: 'public/assets',
-    assetsDir: 'img',
     devServer: {
         proxy: {
             '/ajax': {
@@ -16,9 +15,9 @@ module.exports = {
             entry: 'resources/app.js'
         }
     },
-    css:{
-        sourceMap: true
-    },
+    // css:{
+    //     sourceMap: true
+    // },
     chainWebpack: config => {
         if (process.env.NODE_ENV === 'production') {
             config.plugins.delete('html-index');

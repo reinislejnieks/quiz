@@ -5,81 +5,80 @@ namespace Quiz\Repositories;
 
 class SessionRepository
 {
-    /**
-     * @param $instance
-     */
-    protected static $instance;
-    /**
-     * @param $session_start boolean
-     */
-    private $session_start = false;
-
     public function __construct()
     {
+        if (session_status() === PHP_SESSION_NONE) {
+//            session_id();
+//            session_start(['read_and_close' => true]);
+            session_start();
+
+        }
     }
 
-    public static function getInstance()
-    {
-        return (null !== self::$instance) ? self::$instance : (self::$instance = new self());
-    }
-    /**
-     * Starts session
-     */
-    public function start()
-    {
-        if($this->session_start){
-            return true;
-        }
-        if(!session_start()){
-//            TODO: implement exceptions
-//            throw new Exception('Error session start');
-        }
-        $this->session_start = true;
-        return true;
-    }
 
     /**
      * @param $key
      *
      * @return mixed
      */
-    public function getSessionKey($key)
+    public function get($key)
     {
-        $this->start();
-        return array_key_exists($key, $_SESSION)? $_SESSION[$key]: null;
-    }
-    /**
-     * @param $key string
-     * @param $value string
-     *
-     * @return void
-     */
-    public function setSessionKey($key, $value)
-    {
-        $this->start();
-        $_SESSION[$key] = $value;
+        return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : null ;
     }
 
-    public function isSetSessionKey($key): bool
+
+    /**
+     * @param $key
+     * @param $value
+     *
+     * @return bool
+     */
+    public function set($key, $value)
     {
-        $this->start();
+         $_SESSION[$key] = $value;
+//        session_write_close();
+        return isset($_SESSION[$key]);
+    }
+
+    /**
+     * @param $key
+     *
+     * @return bool
+     */
+    public function isSet($key): bool
+    {
         return array_key_exists($key, $_SESSION);
     }
 
     /**
+     * @return array
+     */
+    public function all(): array
+    {
+        return $_SESSION;
+    }
+
+
+    /**
      * @param $key
      *
-     * @return mixed
+     * @return bool
      */
-    public function unsetSession($key)
+    public function delete($key): bool
     {
-        if(array_key_exists($key, $_SESSION)){
-            $value = $_SESSION[$key];
-            $_SESSION[$key] = null;
+        if (array_key_exists($key, $_SESSION)) {
             unset($_SESSION[$key]);
-            return $value;
         }
+        return !$this->isSet($key);
+    }
 
-        return null;
+
+    /**
+     * Delete session
+     */
+    public function destroy()
+    {
+        session_unset();
+        session_destroy();
     }
 }

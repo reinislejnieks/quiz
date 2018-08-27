@@ -2,21 +2,29 @@
 
 namespace Quiz\Models;
 
-class ResultsModel
+class ResultsModel extends BaseModel
 {
 
     /** @var int */
-    public $user_id;
+    public $userId;
 
     /** @var int */
-    public $quiz_id;
+    public $quizId;
 
     /** @var int */
     public $score;
 
     /** @var string */
-    public $created_at;
-
-    /** @var string */
     public $ip;
+
+    public function jsonSerialize()
+    {
+        return [
+            'userId' => $this->userId,
+            'quizId' => $this->quizId,
+            'score' => $this->score,
+            'createdAt' => $this->createdAt,
+            'ip' => $this->ip
+        ];
+    }
 }

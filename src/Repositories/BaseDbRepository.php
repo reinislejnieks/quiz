@@ -11,13 +11,17 @@ abstract class BaseDbRepository implements RepositoryInterface
     /** @var ConnectionInterface */
     private $connection;
 
+
     /**
      * @param array $conditions
-     * @return static[]
+     * @param int $limit
+     *
+     * @return array
      */
-    public function all(array $conditions = []): array
+    public function all(array $conditions = [], int $limit = 0): array
     {
-        $dataArray = $this->connection->select(static::getTableName(), $conditions);
+        $columns = [];
+        $dataArray = $this->connection->select(static::getTableName(), $conditions, $columns, $limit);
 
         $instances = [];
 
@@ -46,14 +50,15 @@ abstract class BaseDbRepository implements RepositoryInterface
         $this->connection = $connection;
     }
 
+
     /**
      * @param array $attributes
+     *
      * @return BaseModel
      */
-    public function init(array $attributes)
+    public function init(array $attributes): BaseModel
     {
         $class = static::modelName();
-        /** @var BaseModel $instance */
         $instance = new $class;
         $instance->setAttributes($attributes);
 
@@ -64,7 +69,7 @@ abstract class BaseDbRepository implements RepositoryInterface
      * @param array $attributes
      * @return BaseModel
      */
-    public function initLoaded(array $attributes)
+    public function initLoaded(array $attributes): BaseModel
     {
         $instance = $this->init($attributes);
         $instance->isNew = false;
@@ -88,7 +93,8 @@ abstract class BaseDbRepository implements RepositoryInterface
      */
     public function one(array $conditions = [], array $select = [])
     {
-        $data = array_first($this->connection->select(static::getTableName(), $conditions, $select));
+        $limit = 0;
+        $data = array_first($this->connection->select(static::getTableName(), $conditions, $select, $limit));
 
         if (!$data) {
             return null;
@@ -99,19 +105,23 @@ abstract class BaseDbRepository implements RepositoryInterface
 
     /**
      * @param BaseModel $model
-     * @return bool
+     * @return BaseModel
      */
-    public function save($model): bool
+    public function save($model): BaseModel
     {
         $connection = $this->connection;
 
         if ($model->isNew) {
             $connection->insert(static::getTableName(), static::getPrimaryKey(), $this->getAttributes($model));
             $model->id = $connection->getLastInsertId();
-            $this->prepareAttributes($model);
+            // TODO: is this necessary?
+            $model->isNew = false;
+//            $this->prepareAttributes($model);
+            return $this->prepareAttributes($model);
         }
 
-        return $connection->update(static::getTableName(), static::getPrimaryKey(), $this->getAttributes($model));
+        $connection->update(static::getTableName(), static::getPrimaryKey(), $this->getAttributes($model));
+        return $model;
     }
 
     /**
@@ -157,11 +167,21 @@ abstract class BaseDbRepository implements RepositoryInterface
     /**
      * @param array $attributes
      *
-     * @return bool
+     * @return BaseModel
      */
-    public function submit(array $attributes): bool
+    public function submit(array $attributes): BaseModel
     {
         $model = $this->create($attributes);
+        return $this->save($model);
+    }
+
+    /**
+     * @param BaseModel $model
+     *
+     * @return BaseModel
+     */
+    public function submitModel(BaseModel $model): BaseModel
+    {
         return $this->save($model);
     }
 }

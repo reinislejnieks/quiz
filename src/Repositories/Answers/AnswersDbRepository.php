@@ -24,4 +24,15 @@ class AnswersDbRepository extends BaseDbRepository
     {
         return 'answers';
     }
+
+
+    /**
+     * @param int $questionId
+     *
+     * @return array
+     */
+    public function getAnswers(int $questionId)
+    {
+        return $this->all(['questionId' => $questionId]);
+    }
 }
